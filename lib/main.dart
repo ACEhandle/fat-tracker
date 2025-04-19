@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'features/food/ingredient_viewer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,9 +130,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Welcome to Fat Tracker!'),
-      ),
+      body: const IngredientViewer(),
     );
   }
 }
