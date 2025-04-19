@@ -22,18 +22,19 @@ Smooth UI, animations, and single codebase
 ☁️ Backend Options:
 
 Option	Notes
-Firebase	Easy sync, auth, realtime data, great for MVP
+Firebase	Easy sync, auth, realtime data, great for MVP (Selected for this project)
 Supabase	PostgreSQL + Auth + Realtime (open source Firebase alt)
 Custom API	Dart (Shelf), Node.js, or Python (FastAPI) if you want full control
+
 📦 Data Storage:
-Firestore / Supabase DB for user data
+Firestore (Firebase) for user data (Selected for this project)
 
 SQLite or Hive for offline support
 
 🔐 Authentication:
 Google, Apple, or email login
 
-Firebase Auth or Supabase Auth
+Firebase Auth (Selected for this project)
 
 🗓️ Calendar API:
 Google Calendar API for adding events (meal prep, grocery, workouts)
