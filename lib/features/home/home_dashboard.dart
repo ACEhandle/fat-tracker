@@ -7,13 +7,12 @@ class HomeDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Replace with real data/services
     final todayMacros = MacroTargets(
       calories: 1800,
       protein: 120,
       carbs: 200,
       fat: 60,
-    );
+    ); // Replace with real data/services as needed
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -160,9 +160,9 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           const IngredientViewer(),
-          Center(child: const Text('Calendar (coming soon)')),
-          Center(child: const Text('Workouts (coming soon)')),
-          Center(child: const Text('Profile (coming soon)')),
+          const Center(child: Text('Calendar (coming soon)')),
+          const Center(child: Text('Workouts (coming soon)')),
+          const Center(child: Text('Profile (coming soon)')),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

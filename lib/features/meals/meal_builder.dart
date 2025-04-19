@@ -43,6 +43,9 @@ class _MealBuilderState extends State<MealBuilder> {
   @override
   Widget build(BuildContext context) {
     final totals = _calculateTotals();
+    final calories = (totals['Data.Carbohydrate'] != null && totals['Data.Protein'] != null && totals['Data.Fat.Total Lipid'] != null)
+        ? (totals['Data.Carbohydrate']! * 4 + totals['Data.Protein']! * 4 + totals['Data.Fat.Total Lipid']! * 9).toStringAsFixed(0)
+        : '0';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +127,7 @@ class _MealBuilderState extends State<MealBuilder> {
                 children: [
                   const Text('Meal Macros', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text('Calories: ${totals['Data.Carbohydrate'] != null && totals['Data.Protein'] != null && totals['Data.Fat.Total Lipid'] != null ? ((totals['Data.Carbohydrate']!*4 + totals['Data.Protein']!*4 + totals['Data.Fat.Total Lipid']!*9).toStringAsFixed(0)) : '0'} kcal', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Calories: $calories kcal', style: const TextStyle(fontWeight: FontWeight.bold)),
                   Text('Protein: ${totals['Data.Protein']?.toStringAsFixed(1) ?? '0'} g', style: const TextStyle(fontWeight: FontWeight.bold)),
                   Text('Fat: ${totals['Data.Fat.Total Lipid']?.toStringAsFixed(1) ?? '0'} g'),
                   Text('  Saturated: ${totals['Data.Fat.Saturated Fat']?.toStringAsFixed(1) ?? '0'} g'),
