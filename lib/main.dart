@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'features/food/ingredient_viewer.dart';
+import 'features/meals/meal_builder.dart';
+import 'features/home/home_dashboard.dart';
+import 'models/ingredient.dart';
+import 'services/ingredient_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,7 +84,7 @@ class _FatTrackerAppState extends State<FatTrackerApp> {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final ThemeMode themeMode;
   final ValueChanged<bool> onThemeChanged;
   final User? user;
@@ -89,20 +93,31 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.themeMode, required this.onThemeChanged, required this.user, required this.onSignOut});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  static const List<String> _pageTitles = [
+    'Home', 'Meals', 'Ingredients', 'Calendar', 'Workouts', 'Profile'
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    final ingredientService = IngredientService();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fat Tracker'),
+        title: Text(_pageTitles[_selectedIndex]),
         actions: [
           Row(
             children: [
               const Icon(Icons.light_mode),
               Switch(
-                value: themeMode == ThemeMode.dark,
-                onChanged: onThemeChanged,
+                value: widget.themeMode == ThemeMode.dark,
+                onChanged: widget.onThemeChanged,
               ),
               const Icon(Icons.dark_mode),
-              user == null
+              widget.user == null
                   ? IconButton(
                       icon: const Icon(Icons.login),
                       tooltip: 'Sign In',
@@ -117,12 +132,12 @@ class HomePage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(user?.displayName ?? user?.email ?? 'User'),
+                          child: Text(widget.user?.displayName ?? widget.user?.email ?? 'User'),
                         ),
                         IconButton(
                           icon: const Icon(Icons.logout),
                           tooltip: 'Sign Out',
-                          onPressed: onSignOut,
+                          onPressed: widget.onSignOut,
                         ),
                       ],
                     ),
@@ -130,7 +145,39 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const IngredientViewer(),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          const HomeDashboard(),
+          FutureBuilder<List<Ingredient>>(
+            future: ingredientService.fetchIngredients(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final ingredients = snapshot.data ?? [];
+              return MealBuilder(availableIngredients: ingredients);
+            },
+          ),
+          const IngredientViewer(),
+          Center(child: const Text('Calendar (coming soon)')),
+          Center(child: const Text('Workouts (coming soon)')),
+          Center(child: const Text('Profile (coming soon)')),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (idx) => setState(() => _selectedIndex = idx),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Meals'),
+          BottomNavigationBarItem(icon: Icon(Icons.kitchen), label: 'Ingredients'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Calendar'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        type: BottomNavigationBarType.fixed,
+      ),
     );
   }
 }

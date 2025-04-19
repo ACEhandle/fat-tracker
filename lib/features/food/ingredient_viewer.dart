@@ -76,13 +76,10 @@ class _IngredientViewerState extends State<IngredientViewer> {
                       },
                     ),
                     onTap: () {
-                      setState(() {
-                        if (selected) {
-                          _selected.remove(ingredient);
-                        } else {
-                          _selected.add(ingredient);
-                        }
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (context) => IngredientDetailDialog(ingredient: ingredient),
+                      );
                     },
                   );
                 },
@@ -144,6 +141,42 @@ class _IngredientViewerState extends State<IngredientViewer> {
               },
             ),
           ),
+      ],
+    );
+  }
+}
+
+class IngredientDetailDialog extends StatelessWidget {
+  final Ingredient ingredient;
+  const IngredientDetailDialog({super.key, required this.ingredient});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(ingredient.description),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (ingredient.category != null && ingredient.category!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text('Category: ${ingredient.category!}', style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ...ingredient.nutrients.entries.map((e) =>
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Text('${e.key}: ${e.value}'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
       ],
     );
   }
