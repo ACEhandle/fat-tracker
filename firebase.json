@@ -1,4 +1,13 @@
 {
+  "hosting": {
+    "public": "build/web",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "emulators": {
     "auth": {
       "port": 9069
@@ -13,14 +22,7 @@
       "port": 9000
     },
     "hosting": {
-      "port": 5000,
-      "public": "build/web",
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
+      "port": 5000
     },
     "ui": {
       "enabled": true
