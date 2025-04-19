@@ -45,7 +45,7 @@ Copy
 Edit
 class FoodItem {
   String name;
-  double protein, carbs, fat, calories;
+  double protein, carbs, fat, calories, protien;
   String? brand;
 }
 
@@ -82,7 +82,7 @@ Inventory items
 
 Integrate:
 
-Syncing with Firebase/Supabase
+Syncing with Firebase
 
 Auth
 
@@ -93,8 +93,7 @@ Expand to desktop (Flutter desktop shares 90%+ of code)
 🧠 Next Steps
 Do you want help sketching wireframes or building a Flutter starter repo?
 
-Would you prefer Firebase or Supabase as the backend to prototype with?
+Firebase selected as the backend to prototype with
 
-Do you want offline-first (local DB syncing) or cloud-first?
-
-Let me know and I can help you scaffold this thing out.
+Offline-first (local DB syncing) for development
+Firebase Auth for user management
