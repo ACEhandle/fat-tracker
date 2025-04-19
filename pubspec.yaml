@@ -1,4 +1,4 @@
-name: fat--tracker
+name: fat_tracker
 version: 0.1.0
 description: >-
   Cross-platform nutrition, workout, and inventory management app with Firebase sync and Google Calendar integration.
