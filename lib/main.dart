@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: const Center(
-        child: Text('Welcome to Fat Tracker!'),
+        child: Text('Welcome to Fat Tracker! Lets get not fat, Fatty!'),
       ),
     );
   }
