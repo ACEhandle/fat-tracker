@@ -1,10 +1,24 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: 'dummy-api-key',
+        authDomain: 'dummy-auth-domain',
+        projectId: 'dummy-project-id',
+        storageBucket: 'dummy-storage-bucket',
+        messagingSenderId: 'dummy-messaging-sender-id',
+        appId: 'dummy-app-id',
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
   runApp(const FatTrackerApp());
 }
 
@@ -122,15 +136,22 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class AuthDialog extends StatelessWidget {
+class AuthDialog extends StatefulWidget {
   const AuthDialog({super.key});
 
-  Future<void> _signInWithGoogle(BuildContext context) async {
+  @override
+  State<AuthDialog> createState() => _AuthDialogState();
+}
+
+class _AuthDialogState extends State<AuthDialog> {
+  Future<void> _signInWithGoogle() async {
     try {
       final GoogleAuthProvider googleProvider = GoogleAuthProvider();
       await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      if (!mounted) return;
       Navigator.of(context).pop();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Sign in failed: ${e.toString()}')),
       );
@@ -147,7 +168,7 @@ class AuthDialog extends StatelessWidget {
           ElevatedButton.icon(
             icon: const Icon(Icons.account_circle),
             label: const Text('Sign in with Google'),
-            onPressed: () => _signInWithGoogle(context),
+            onPressed: _signInWithGoogle,
           ),
         ],
       ),
