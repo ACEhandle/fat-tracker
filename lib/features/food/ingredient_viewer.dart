@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/ingredient.dart';
 import '../../services/ingredient_service.dart';
 import '../../services/ingredient_image_service.dart';
@@ -117,12 +118,28 @@ class _IngredientViewerState extends State<IngredientViewer> {
                     ],
                   ),
                 );
+                if (!context.mounted) return;
                 if (result != null && result.trim().isNotEmpty) {
-                  // TODO: Save meal with name `result` and selected ingredients
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Meal "$result" created with ${_selected.length} ingredients (save logic coming soon).')),
-                  );
-                  setState(() => _selected.clear());
+                  // Save meal with name `result` and selected ingredients
+                  final meal = {
+                    'name': result.trim(),
+                    'ingredientIds': _selected.map((i) => i.id).toList(),
+                    'ingredientDescriptions': _selected.map((i) => i.description).toList(),
+                    'createdAt': DateTime.now().toIso8601String(),
+                  };
+                  try {
+                    await FirebaseFirestore.instance.collection('meals').add(meal);
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Meal "$result" created with ${_selected.length} ingredients.')),
+                    );
+                    setState(() => _selected.clear());
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to save meal: $e')),
+                    );
+                  }
                 }
               },
             ),
