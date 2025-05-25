@@ -68,6 +68,49 @@
 
 ---
 
+## Firestore Ingredient Data & Persistence
+
+- Ingredient data is stored in the Firestore `ingredients` collection. If you see no values in the app, the collection is likely empty in your emulator.
+- To avoid re-seeding data every time you restart the Firebase Emulator Suite, use the emulator's export/import feature:
+
+### Persisting Emulator Data Between Sessions
+1. **After seeding your data (e.g., after first import):**
+   ```powershell
+   firebase emulators:export ./emulator-data
+   ```
+2. **Start the emulator with persistence:**
+   ```powershell
+   firebase emulators:start --import=./emulator-data --export-on-exit
+   ```
+   - This will load your previous data and save changes on exit, so you only need to seed once.
+
+- If you want to reset the data, delete the `./emulator-data` folder and repeat the seeding process.
+
+---
+
+## Troubleshooting & Known Issues (May 2025)
+
+### 1. White Screen on iPhone or Mobile Browsers
+- **Symptom:** App loads as a blank/white screen on iPhone or other mobile browsers.
+- **Solution:**
+  - Error logging has been added to `web/index.html`. Any JavaScript errors will now be displayed at the bottom of the screen in red text and saved to `localStorage` as `flutter_web_last_error`.
+  - If you see a white screen, check for an error message at the bottom. If present, use it to debug or report the issue.
+
+### 2. Emulator/Port Conflicts
+- **Symptom:** Firebase emulators fail to start, or ports 8080/9000/5000 are in use.
+- **Solution:**
+  - Use Task Manager or `Get-Process -Id <PID>` and `Stop-Process -Id <PID>` in PowerShell to kill orphaned Java/Node processes.
+  - See instructions above for checking port usage.
+
+### 3. Rebuilding for LAN Hosting
+- **Note:**
+  - After editing `web/index.html` or any Dart code, always run `flutter build web` before restarting the Firebase emulator to ensure the latest code is served on the LAN.
+
+### 4. Error Logging Script Location
+- The error logging script is in `web/index.html` and is injected into the build output. If you update this script, rebuild the web app.
+
+---
+
 **Tip:**
 - You can run both the dev environment and LAN hosting at the same time.
 - Only the LAN version needs a rebuild and emulator restart to update.

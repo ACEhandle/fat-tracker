@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/macro_targets.dart';
 import 'macro_summary.dart';
+import '../food/ingredient_viewer.dart';
 
 class HomeDashboard extends StatelessWidget {
   const HomeDashboard({super.key});
@@ -26,18 +27,28 @@ class HomeDashboard extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                   icon: const Icon(Icons.fastfood),
-                  label: const Text('Log Food'),
-                  onPressed: () {},
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.restaurant_menu),
-                  label: const Text('Add Meal'),
-                  onPressed: () {},
+                  label: const Text('Log Food / Add Meal'),
+                  onPressed: () {
+                    // Show ingredient viewer as a modal bottom sheet for both food logging and meal creation
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => const Padding(
+                        padding: EdgeInsets.only(top: 24.0),
+                        child: SizedBox(
+                          height: 600,
+                          child: IngredientViewer(),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.fitness_center),
                   label: const Text('Workout'),
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Implement workout logging modal
+                  },
                 ),
               ],
             ),

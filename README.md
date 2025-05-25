@@ -33,7 +33,7 @@ Fat Tracker is a cross-platform nutrition, workout, and inventory management app
    - For development, you can use hot reload in Chrome or Edge.
 
 ## Potential Next Steps
-- Implement authentication UI and connect to Firebase Auth.
+- ~~Implement authentication UI and connect to Firebase Auth.~~ (Completed: Auth emulator and sign-in flow are integrated for local development.)
 - Build out CRUD interfaces for food, meals, inventory, and workouts.
 - Integrate Firestore for persistent data storage.
 - Add Google Calendar API integration for workout/meal scheduling.

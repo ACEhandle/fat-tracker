@@ -33,6 +33,27 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    // Error logging for mobile debugging
+    window.onerror = function(message, source, lineno, colno, error) {
+      var log = '[FlutterWebError] ' + message + ' at ' + source + ':' + lineno + ':' + colno;
+      try {
+        localStorage.setItem('flutter_web_last_error', log);
+      } catch (e) {}
+      // Also print to the screen for mobile debugging
+      var el = document.createElement('pre');
+      el.style.color = 'red';
+      el.style.background = '#fff';
+      el.style.fontSize = '14px';
+      el.style.position = 'fixed';
+      el.style.bottom = '0';
+      el.style.left = '0';
+      el.style.zIndex = '9999';
+      el.textContent = log;
+      document.body.appendChild(el);
+      return false; // Let browser handle as well
+    };
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
