@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'features/food/ingredient_viewer.dart';
 import 'features/meals/meal_builder.dart';
 import 'features/home/home_dashboard.dart';
@@ -24,6 +25,10 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
+
+  // Always connect to Firestore emulator in dev
+  FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+
   runApp(const FatTrackerApp());
 }
 

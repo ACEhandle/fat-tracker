@@ -1,45 +1,52 @@
 # Fat Tracker
 
-## Project Overview
-Fat Tracker is a cross-platform nutrition, workout, and inventory management app with Firebase sync and Google Calendar integration. This project is scaffolded with Flutter for the frontend and uses Firebase for authentication, Firestore, and local emulation during development.
+## Quickstart: Dev Environment Setup
 
-## Progress & Scaffolding
-- **Flutter app**: Main page with light/dark mode toggle and placeholder for authentication dialog.
-- **Firebase Emulator Suite**: Configured for Auth, Firestore, Functions, Database, and Hosting.
-- **Hosting**: Serves the Flutter web build from `build/web` using Firebase Hosting emulator.
-- **Project structure**: Features, models, services, and widgets directories scaffolded for modular development.
-- **Linting**: Uses `flutter_lints` for code quality.
-
-## How to Run the Dev Environment (from Cold Boot)
-1. **Install dependencies**
-   ```sh
+1. Install dependencies:
+   ```pwsh
    flutter pub get
-   cd functions && npm install && cd ..
+   cd functions; npm install; cd ..
    ```
-2. **Build the Flutter web app**
-   ```sh
+2. Build Flutter web app:
+   ```pwsh
    flutter build web
    ```
-3. **Start the Firebase Emulator Suite**
-   ```sh
+3. Start Firebase Emulator Suite:
+   ```pwsh
    firebase emulators:start
    ```
-   - The app will be served at [http://localhost:5000](http://localhost:5000) (or the port specified in `firebase.json`).
-   - Emulator UI: [http://localhost:4000](http://localhost:4000)
-4. **Run the Flutter app for web (hot reload/dev)**
-   ```sh
+   - App: http://localhost:5000
+   - Emulator UI: http://localhost:4000
+4. Run Flutter app for web (hot reload):
+   ```pwsh
    flutter run -d chrome
    ```
-   - For development, you can use hot reload in Chrome or Edge.
 
-## Potential Next Steps
-- ~~Implement authentication UI and connect to Firebase Auth.~~ (Completed: Auth emulator and sign-in flow are integrated for local development.)
-- Build out CRUD interfaces for food, meals, inventory, and workouts.
-- Integrate Firestore for persistent data storage.
-- Add Google Calendar API integration for workout/meal scheduling.
-- Write unit and widget tests for core features.
-- Set up CI/CD for automated builds and deploys (optional).
-- Polish UI/UX and add responsive design for mobile/web.
+## CSV Ingestion: Ingredients
+
+- Use `functions/ingredients.csv` as your template.
+- Required columns: `Description`, `Category`, `Nutrient Data Bank Number`, `Calories` (or `kcal`).
+- Place your CSV at `functions/ingredients.csv`.
+- Ingest with:
+  ```pwsh
+  node functions/ingest_ingredients.js
+  ```
+- Data should appear in the app and Firestore Emulator UI.
+
+## Troubleshooting & Hiccups
+
+- **Emulator data not visible:**
+  - Ensure projectId is `local-fattracker` in both the ingestion script and emulator config.
+  - Restart emulators after config changes.
+- **Ingredients not showing in app:**
+  - Confirm `Calories` column exists and is populated.
+  - Check for typos in CSV headers.
+  - Verify app and script use the same emulator/project.
+- **Ingestion script errors:**
+  - Check for missing required columns or malformed CSV.
+
+## Next Steps
+- Start with ingredients. Once working, expand to other data types (meals, workouts, inventory).
 
 ---
-For any issues or questions, see the code comments or open an issue.
+See `DEV_AND_LAN_HOSTING.md` for LAN hosting and deployment instructions.

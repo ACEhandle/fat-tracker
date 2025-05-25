@@ -34,6 +34,7 @@ class _IngredientViewerState extends State<IngredientViewer> {
           child: StreamBuilder<List<Ingredient>>(
             stream: _ingredientService.streamIngredients(),
             builder: (context, snapshot) {
+              print('DEBUG: Ingredient snapshot hasData=${snapshot.hasData} length=${snapshot.data?.length} error=${snapshot.error}');
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
