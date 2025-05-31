@@ -165,8 +165,40 @@ By documenting these findings, future ingestion tasks can avoid similar pitfalls
 - Ingredients and workouts data have been successfully ingested into the Firestore emulator.
 
 ### Next Steps
-- Verify app functionality across all features.
-- Prepare for deployment by switching to the live Firebase project if needed.
+
+1. **Ingredient Meal Building**:
+   - Enhance the meal-building feature to allow users to create meals using ingredients from the database.
+   - Add functionality to calculate nutritional values for meals.
+
+2. **UI Cleanups**:
+   - Improve the overall UI/UX for a more intuitive user experience.
+   - Ensure consistency in design across all screens.
+   - Address any layout or styling issues.
+
+3. **Testing and Debugging**:
+   - Test the updated meal-building feature thoroughly.
+   - Fix any bugs or issues identified during testing.
+
+## Recent Updates
+
+### Steps Taken Today
+1. **LAN Hosting Configuration**:
+   - Updated `main.dart` to use `localhost` for Firestore emulator connections.
+   - Removed unnecessary debug logging for ingredients.
+
+2. **Debugging Emulator Connectivity**:
+   - Verified Firestore emulator is running and accessible.
+   - Terminated processes blocking required ports (8080 and 9000).
+
+3. **Git Cleanup**:
+   - Updated `.gitignore` to exclude unnecessary files and folders, including `.dart_tool/`, `build/`, `web/`, and runtime logs.
+   - Removed unnecessary files from the repository and committed changes.
+
+4. **Testing**:
+   - Verified app functionality in Chrome using `flutter run -d chrome`.
+
+### Next Steps
+- Add a README for re-seeding the database when restarting the Firebase emulator.
 
 ---
 See `DEV_AND_LAN_HOSTING.md` for LAN hosting and deployment instructions.
