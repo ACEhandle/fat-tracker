@@ -124,6 +124,33 @@ Connecting a Flutter application to the Firebase Emulator Suite for local develo
 
 By following these points, you can establish a reliable local development environment for Flutter with Firebase, allowing for efficient data ingestion and testing.
 
+## Exercise Data Ingestion: Lessons Learned
+
+When ingesting exercise data from the wger API, we encountered several challenges and resolved them as follows:
+
+1. **Data Structure Differences:**
+   - The wger API returns exercise names and descriptions in a nested `translations` array.
+   - We updated the ingestion script to extract the English translation (language ID 2) from this array.
+
+2. **Firestore Emulator Configuration:**
+   - Ensure the `FIRESTORE_EMULATOR_HOST` environment variable is set to `localhost:8080`.
+   - Explicitly configure Firestore settings in the ingestion script:
+     ```javascript
+     db.settings({ host: process.env.FIRESTORE_EMULATOR_HOST, ssl: false });
+     ```
+
+3. **Script Syntax Issues:**
+   - Ensure proper syntax for loops and logging. For example, avoid placing a `for` loop on the same line as a `console.log` statement.
+
+4. **Testing and Debugging:**
+   - Add detailed logging to the script to identify skipped records and reasons for skipping.
+   - Test with a small subset of data before processing the entire dataset.
+
+5. **Successful Ingestion:**
+   - After resolving the above issues, 656 exercises were successfully ingested into the Firestore emulator.
+
+By documenting these findings, future ingestion tasks can avoid similar pitfalls and ensure smooth data processing.
+
 ## Next Steps
 - Start with ingredients. Once working, expand to other data types (meals, workouts, inventory).
 
