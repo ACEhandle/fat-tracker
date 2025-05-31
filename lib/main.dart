@@ -14,12 +14,12 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'dummy-api-key',
-        authDomain: 'dummy-auth-domain',
-        projectId: 'dummy-project-id',
-        storageBucket: 'dummy-storage-bucket',
-        messagingSenderId: 'dummy-messaging-sender-id',
-        appId: 'dummy-app-id',
+        apiKey: 'dummy-api-key', // Keep as is or use a valid one if you have it
+        authDomain: 'dummy-auth-domain', // Keep as is or use a valid one
+        projectId: 'local-fattracker', // CHANGED
+        storageBucket: 'dummy-storage-bucket', // Keep as is
+        messagingSenderId: 'dummy-messaging-sender-id', // Keep as is
+        appId: 'dummy-app-id', // Keep as is
       ),
     );
   } else {
@@ -27,7 +27,9 @@ void main() async {
   }
 
   // Always connect to Firestore emulator in dev
+  print('Connecting to Firestore emulator at localhost:8080'); // Add log
   FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  print('Firestore emulator connected.'); // Add log
 
   runApp(const FatTrackerApp());
 }

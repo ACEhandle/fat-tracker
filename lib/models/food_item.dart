@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FoodItem {
   final String id;
   final String name;
@@ -32,4 +34,16 @@ class FoodItem {
         carbs: map['carbs'],
         fat: map['fat'],
       );
+
+  factory FoodItem.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return FoodItem(
+      id: doc.id,
+      name: data['name'] ?? '',
+      calories: data['calories']?.toDouble() ?? 0.0,
+      protein: data['protein']?.toDouble() ?? 0.0,
+      carbs: data['carbs']?.toDouble() ?? 0.0,
+      fat: data['fat']?.toDouble() ?? 0.0,
+    );
+  }
 }

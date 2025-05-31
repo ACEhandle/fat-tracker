@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/ingredient.dart';
 import '../../services/ingredient_service.dart';
-import '../../services/ingredient_image_service.dart';
 
 class IngredientViewer extends StatefulWidget {
   const IngredientViewer({super.key});
@@ -13,7 +12,6 @@ class IngredientViewer extends StatefulWidget {
 
 class _IngredientViewerState extends State<IngredientViewer> {
   final IngredientService _ingredientService = IngredientService();
-  String _search = '';
   final List<Ingredient> _selected = [];
 
   @override
@@ -27,59 +25,41 @@ class _IngredientViewerState extends State<IngredientViewer> {
               labelText: 'Search Ingredients',
               prefixIcon: Icon(Icons.search),
             ),
-            onChanged: (v) => setState(() => _search = v),
+            onChanged: null,
           ),
         ),
         Expanded(
           child: StreamBuilder<List<Ingredient>>(
             stream: _ingredientService.streamIngredients(),
             builder: (context, snapshot) {
-              print('DEBUG: Ingredient snapshot hasData=${snapshot.hasData} length=${snapshot.data?.length} error=${snapshot.error}');
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No ingredients found.'));
+              if (snapshot.hasError) {
+                print('Error in StreamBuilder: ${snapshot.error}'); // Add error logging
+                return const Center(child: Text('Error loading ingredients.'));
               }
-              final filtered = snapshot.data!
-                  .where((i) => i.description.toLowerCase().contains(_search.toLowerCase()))
-                  .toList();
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                print('StreamBuilder: No ingredients found or data is empty.'); // Add logging
+                return const Center(child: Text('FAIL: No ingredients found.'));
+              }
+
+              // Data is available, display it
+              final ingredients = snapshot.data!;
+              print('${ingredients.length} ingredients loaded.'); // Log count
               return ListView.builder(
-                itemCount: filtered.length,
-                itemBuilder: (context, idx) {
-                  final ingredient = filtered[idx];
-                  final selected = _selected.contains(ingredient);
+                itemCount: ingredients.length,
+                itemBuilder: (context, index) {
+                  final ingredient = ingredients[index];
+                  // Basic display, can be enhanced later
                   return ListTile(
-                    leading: FutureBuilder<String?>(
-                      future: IngredientImageService.fetchImageUrl(ingredient.description),
-                      builder: (context, snap) {
-                        if (snap.connectionState == ConnectionState.waiting) {
-                          return const SizedBox(width: 40, height: 40, child: CircularProgressIndicator(strokeWidth: 2));
-                        }
-                        if (snap.hasData && snap.data != null) {
-                          return Image.network(snap.data!, width: 40, height: 40, fit: BoxFit.cover);
-                        }
-                        return const Icon(Icons.image_not_supported, size: 40);
-                      },
-                    ),
                     title: Text(ingredient.description),
-                    subtitle: Text(ingredient.category ?? ''),
-                    trailing: Checkbox(
-                      value: selected,
-                      onChanged: (v) {
-                        setState(() {
-                          if (v == true) {
-                            _selected.add(ingredient);
-                          } else {
-                            _selected.remove(ingredient);
-                          }
-                        });
-                      },
-                    ),
+                    subtitle: Text(ingredient.category ?? 'No category'),
                     onTap: () {
+                      // Optional: Show detail dialog or add to selection
                       showDialog(
                         context: context,
-                        builder: (context) => IngredientDetailDialog(ingredient: ingredient),
+                        builder: (_) => IngredientDetailDialog(ingredient: ingredient),
                       );
                     },
                   );
