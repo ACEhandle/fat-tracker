@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'features/food/ingredient_viewer.dart';
 import 'features/meals/meal_builder.dart';
 import 'features/home/home_dashboard.dart';
+import 'features/workouts/exercise_viewer.dart';
 import 'models/ingredient.dart';
 import 'services/ingredient_service.dart';
 
@@ -28,8 +29,18 @@ void main() async {
 
   // Always connect to Firestore emulator in dev
   print('Connecting to Firestore emulator at localhost:8080'); // Add log
-  FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  FirebaseFirestore.instance.useFirestoreEmulator(
+    'localhost',
+    8080,
+  );
   print('Firestore emulator connected.'); // Add log
+
+  // Removed the debug query that prints all ingredients to the console
+  FirebaseFirestore.instance.collection('ingredients').get().then((snapshot) {
+    print('DEBUG: Ingredients fetched successfully.');
+  }).catchError((error) {
+    print('DEBUG: Error fetching ingredients: ${error}');
+  });
 
   runApp(const FatTrackerApp());
 }
@@ -43,27 +54,26 @@ class FatTrackerApp extends StatefulWidget {
 
 class _FatTrackerAppState extends State<FatTrackerApp> {
   ThemeMode _themeMode = ThemeMode.system;
-  User? _user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((user) {
       setState(() {
-        _user = user;
+        // _user = user; // Temporarily commented out
       });
     });
   }
 
-  void _toggleTheme(bool isDark) {
-    setState(() {
-      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    });
-  }
+  // void _toggleTheme(bool isDark) { // Temporarily commented out
+  //   setState(() {
+  //     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+  //   });
+  // }
 
-  void _signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
+  // void _signOut() async { // Temporarily commented out
+  //   await FirebaseAuth.instance.signOut();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +92,23 @@ class _FatTrackerAppState extends State<FatTrackerApp> {
       themeMode: _themeMode,
       home: HomePage(
         themeMode: _themeMode,
-        onThemeChanged: _toggleTheme,
-        user: _user,
-        onSignOut: _signOut,
+        onThemeChanged: (isDark) {
+          setState(() {
+            _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+          });
+        },
+        user: FirebaseAuth.instance.currentUser,
+        onSignOut: () async {
+          await FirebaseAuth.instance.signOut();
+        },
       ),
+      routes: {
+        '/exercises': (context) => const ExerciseViewer(),
+        // ...existing routes...
+      },
       debugShowCheckedModeBanner: false,
+      // Removed the performance overlay to resolve the white screen issue
+      // showPerformanceOverlay: true,
     );
   }
 }
@@ -168,7 +190,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const IngredientViewer(),
           const Center(child: Text('Calendar (coming soon)')),
-          const Center(child: Text('Workouts (coming soon)')),
+          const ExerciseViewer(),
           const Center(child: Text('Profile (coming soon)')),
         ],
       ),

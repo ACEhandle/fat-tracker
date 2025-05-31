@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 firebase-debug.log*
 firebase-debug.*.log*
+firestore-debug.log
+database-debug.log
 
 # Firebase cache
 .firebase/
@@ -73,3 +75,15 @@ node_modules/
 
 # Ingestion scripts
 functions/ingest_*.js
+
+# Ignore Dart tool files
+.dart_tool/
+
+# Ignore build artifacts
+build/
+
+# Ignore web build artifacts
+web/
+
+# Ignore IDE-specific files
+*.iml

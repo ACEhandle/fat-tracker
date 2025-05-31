@@ -151,8 +151,22 @@ When ingesting exercise data from the wger API, we encountered several challenge
 
 By documenting these findings, future ingestion tasks can avoid similar pitfalls and ensure smooth data processing.
 
-## Next Steps
-- Start with ingredients. Once working, expand to other data types (meals, workouts, inventory).
+## Current Development State
+
+### Firebase Emulator Setup
+- Firestore emulator is configured to run on `localhost:8080`.
+- Debug logging for ingredients has been simplified to only indicate success or failure.
+
+### Testing
+- The app is functional and can be run using:
+  ```bash
+  flutter run -d chrome
+  ```
+- Ingredients and workouts data have been successfully ingested into the Firestore emulator.
+
+### Next Steps
+- Verify app functionality across all features.
+- Prepare for deployment by switching to the live Firebase project if needed.
 
 ---
 See `DEV_AND_LAN_HOSTING.md` for LAN hosting and deployment instructions.
